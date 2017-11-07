@@ -1,0 +1,4 @@
+HelloIAmTextFile
+
+
+if clause ends in period or commas, check for quotation. if there, add it to the clause
