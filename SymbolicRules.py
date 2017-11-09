@@ -53,10 +53,17 @@ def is_word_in_dictionary(word):
     return 0
 
 
-def isword_contained_in_dictionary(word):
+def is_word_contained_in_dictionary(word):
     for words in dictionary:
-            if word in words:
-                return 1
+        if word in words:
+            return 1
+    return 0
+
+
+def is_word_in_beginning_of_dictionary(word):
+    for words in dictionary:
+        if word == words[:len(word)]:
+            return 1
     return 0
 
 
