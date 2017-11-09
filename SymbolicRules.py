@@ -53,6 +53,13 @@ def is_word_in_dictionary(word):
     return 0
 
 
+def isword_contained_in_dictionary(word):
+    for words in dictionary:
+            if word in words:
+                return 1
+    return 0
+
+
 def is_last_letter_capital(word):
     if word[-1:].isupper():
         return 1
