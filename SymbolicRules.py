@@ -27,6 +27,11 @@ def is_vowel_not_present(word):
             return 0
     return 1
 
+def is_I(word):
+    if word == "I":
+        return 1
+    else:
+        return 0
 
 def word_end_in_ing(word):
     if word[-3:] == "ing":
@@ -42,8 +47,8 @@ def word_end_in_y_or_s(word):
         return 0
 
 
-def word_end_in_ly(word):
-    if word[-2:] == "ly":
+def word_end_in_ly_or_ed(word):
+    if word[-2:] == "ly" or word[-2:] == "ed":
         return 1
     else:
         return 0
@@ -52,6 +57,12 @@ def word_end_in_ly(word):
 def is_word_in_dictionary(word):
     for words in dictionary:
         if word == words:
+            return 1
+    return 0
+
+def had_word_in_dictionary(word):
+    for words in dictionary:
+        if word[:(len(word)-1)] == words:
             return 1
     return 0
 
