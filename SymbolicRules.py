@@ -1,5 +1,6 @@
+from parcer import *
 
-dictionary = {}
+#dictionary = {}
 textFile = []
 with open("textFile.txt", "r") as file:
     for line in file:
@@ -134,4 +135,8 @@ def rules(inputs):
             i += 1
             word = ""
             break
+        
+print(is_word_in_dictionary("The"))
+print(is_word_in_dictionary("NotAWord"))
+
 
