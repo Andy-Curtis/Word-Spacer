@@ -19,12 +19,13 @@ def ispunct(char):
         return False
 
 
-def is_vowel_present(word):
+def is_vowel_not_present(word):
     for ch in word:
         if (ch == "a" or ch == "e" or ch == "i" or ch == "o" or ch == "u"
-                or ch == "y"):
-            return 1
-    return 0
+                or ch == "y" or ch == "A" or ch == "E" or ch == "I" or ch == "O" or ch == "U"
+                or ch == "Y"):
+            return 0
+    return 1
 
 
 def word_end_in_ing(word):
@@ -70,7 +71,7 @@ def is_word_in_beginning_of_dictionary(word):
 
 
 def is_last_letter_capital(word):
-    if word[-1:].isupper():
+    if word[-1:].isupper() and len(word) > 1:
         return 1
     else:
         return 0
