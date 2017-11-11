@@ -136,7 +136,6 @@ def rules(inputs):
             word = ""
             break
         
-print(is_word_in_dictionary("The"))
-print(is_word_in_dictionary("NotAWord"))
+
 
 
