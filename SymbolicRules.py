@@ -107,6 +107,10 @@ def check_for_possession(word):
         return 0
 
 
+def length_of_word(word):
+    return len(word)
+
+
 # def create_clause(inputs):
 #     if not inputs:
 #         return ""
