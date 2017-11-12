@@ -44,10 +44,26 @@ def buildDict():
     makeLines('frankch6.txt')
     makeLines('frankch7.txt')
     makeLines('frankch8.txt')
-    makeLines('frankch9.txt')
+
+def create_clause(file):
+    testfile = open(file)
+    clause = ''
+    for line in testfile:
+        for ch in line:
+            if ch == "." or ch == ',' or ch ==':':
+                ruleset(clause)
+                clause = ''
+                print(' ')
+                print('--------------finished printing clause---------')
+                print(' ')
+            clause = clause + ch
 
 
+    print("done creating clause")
 
+
+def ruleset(clause):
+    print (clause)
 
 #main Only thing running at the begining
 print('creating new dictionary')
@@ -58,3 +74,4 @@ for k in dictionary:
     print k , dictionary[k]
 
 print 'finished printing dictionary'
+create_clause('ch9Test.txt')
