@@ -52,7 +52,7 @@ def create_clause(file):
     for line in testfile:
         for ch in line:
             clause = clause + ch
-            if ispunct(ch):
+            if ch == "," or ch == ':' or ch == ';' or ch == ":" or ch == '"' or ch == '.' or ch == '?' or ch == '!':
                 #ruleset(clause) best place to feed caluses into ruleset
                 clause = ''
     print("done creating clause")
@@ -62,9 +62,9 @@ def create_clause(file):
 print('creating new dictionary')
 time.sleep(3)
 buildDict()
-print'done making dictionary'
-for k in dictionary:
-    print k , dictionary[k]
+print("done making dictionary")
+#for k in dictionary:
+#    print (k , dictionary[k]
 
-print 'finished printing dictionary'
+print("finished printing dictionary")
 create_clause('ch9Test.txt')
