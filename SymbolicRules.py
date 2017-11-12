@@ -1,4 +1,6 @@
-dictionary = {}
+from parcer import *
+
+#dictionary = {}
 textFile = []
 with open("textFile.txt", "r") as file:
     for line in file:
@@ -17,13 +19,19 @@ def ispunct(char):
         return False
 
 
-def is_vowel_present(word):
+def is_vowel_not_present(word):
     for ch in word:
         if (ch == "a" or ch == "e" or ch == "i" or ch == "o" or ch == "u"
-                or ch == "y"):
-            return 1
-    return 0
+                or ch == "y" or ch == "A" or ch == "E" or ch == "I" or ch == "O" or ch == "U"
+                or ch == "Y"):
+            return 0
+    return 1
 
+def is_I(word):
+    if word == "I":
+        return 1
+    else:
+        return 0
 
 def word_end_in_ing(word):
     if word[-3:] == "ing":
@@ -39,8 +47,8 @@ def word_end_in_y_or_s(word):
         return 0
 
 
-def word_end_in_ly(word):
-    if word[-2:] == "ly":
+def word_end_in_ly_or_ed(word):
+    if word[-2:] == "ly" or word[-2:] == "ed":
         return 1
     else:
         return 0
@@ -49,6 +57,12 @@ def word_end_in_ly(word):
 def is_word_in_dictionary(word):
     for words in dictionary:
         if word == words:
+            return 1
+    return 0
+
+def had_word_in_dictionary(word):
+    for words in dictionary:
+        if word[:(len(word)-1)] == words:
             return 1
     return 0
 
@@ -68,7 +82,7 @@ def is_word_in_beginning_of_dictionary(word):
 
 
 def is_last_letter_capital(word):
-    if word[-1:].isupper():
+    if word[-1:].isupper() and len(word) > 1:
         return 1
     else:
         return 0
@@ -107,6 +121,10 @@ def check_for_possession(word):
         return 0
 
 
+def length_of_word(word):
+    return len(word)
+
+
 # def create_clause(inputs):
 #     if not inputs:
 #         return ""
@@ -133,4 +151,7 @@ def rules(inputs):
             i += 1
             word = ""
             break
+        
+
+
 
