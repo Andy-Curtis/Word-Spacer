@@ -2,6 +2,7 @@
 #version 1.0
 #11/6/2017
 #Kyle Boutin
+from SymbolicRules import *
 import os
 import time
 import string
@@ -50,20 +51,12 @@ def create_clause(file):
     clause = ''
     for line in testfile:
         for ch in line:
-            if ch == "." or ch == ',' or ch ==':':
-                ruleset(clause)
-                clause = ''
-                print(' ')
-                print('--------------finished printing clause---------')
-                print(' ')
             clause = clause + ch
-
-
+            if ispunct(ch):
+                #ruleset(clause) best place to feed caluses into ruleset
+                clause = ''
     print("done creating clause")
 
-
-def ruleset(clause):
-    print (clause)
 
 #main Only thing running at the begining
 print('creating new dictionary')
