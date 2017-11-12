@@ -53,8 +53,8 @@ def buildDict():
 print('creating new dictionary')
 time.sleep(3)
 buildDict()
-print'done making dictionary'
-for k in dictionary:
-    print k , dictionary[k]
+print('done making dictionary')
+#for k in dictionary:
+#    print (k , dictionary[k])
 
-print 'finished printing dictionary'
+#print ('finished printing dictionary')
