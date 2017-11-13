@@ -1,6 +1,6 @@
 from parcer import *
 
-#dictionary = {}
+global dictionary
 textFile = []
 with open("textFile.txt", "r") as file:
     for line in file:

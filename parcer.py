@@ -2,7 +2,9 @@
 #version 1.0
 #11/6/2017
 #Kyle Boutin
-from SymbolicRules import *
+#from SymbolicRules import *
+from FearFactor import *
+
 import os
 import time
 import string
@@ -53,6 +55,7 @@ def create_clause(file):
         for ch in line:
             clause = clause + ch
             if ch == "," or ch == ':' or ch == ';' or ch == ":" or ch == '"' or ch == '.' or ch == '?' or ch == '!':
+                #ClauseFeeder(clause)
                 #ruleset(clause) best place to feed caluses into ruleset
                 clause = ''
     print("done creating clause")

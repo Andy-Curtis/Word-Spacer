@@ -73,9 +73,23 @@ def ClauseFeeder(Clause):
             SpacedClause = SpacedClause + " " + Clause[i:x]
         x += 1
     print(SpacedClause)
-    
 
 
-ClauseFeeder("Ibegpermissiontohaveafewwitnessesexaminedconcerningmycharacter;")
+def create_clause(file):
+    testfile = open(file)
+    clause = ''
+    for line in testfile:
+        for ch in line:
+            clause = clause + ch
+            if ch == "," or ch == ':' or ch == ';' or ch == ":" or ch == '"' or ch == '.' or ch == '?' or ch == '!':
+                ClauseFeeder(clause)
+                #ruleset(clause) best place to feed caluses into ruleset
+                clause = ''
+    print("done creating clause")
+
+
+
+create_clause("ch9Test.txt")
+#ClauseFeeder("Ibegpermissiontohaveafewwitnessesexaminedconcerningmycharacter;")
 
 
