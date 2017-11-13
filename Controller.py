@@ -186,6 +186,9 @@ def check_frequency_of_word_in_dictionary(word):
 FearFactorOld = -100.0
 FearFactorNew = -100.0
 debug = ""
+Buffer = ""
+SpacedClause = ""
+
 
 def RunRules(word):
     global FearFactorOld
@@ -197,63 +200,118 @@ def RunRules(word):
     #Low fear factor = less likely to be a word
     FearSum = 0.0
 
-    FearSum += (is_vowel_not_present(word) * -10.0)
+    FearSum += (is_vowel_not_present(word) * -50.0)
     debug += " " + str(is_vowel_not_present(word))
     
-    FearSum += (is_I(word) * 1.0)
+    FearSum += (is_I(word) * 3.0)
     debug += " " + str(is_I(word))
     
-    FearSum += (word_end_in_ing(word) * 0.9)
+    FearSum += (word_end_in_ing(word) * 1.5)
     debug += " " + str(word_end_in_ing(word))
     
-    FearSum += (word_end_in_y_or_s(word) * 0.2)
+    FearSum += (word_end_in_y_or_s(word) * 0.5)
     debug += " " + str(word_end_in_y_or_s(word))
     
-    FearSum += (word_end_in_ly_or_ed(word) * 0.5)
+    FearSum += (word_end_in_ly_or_ed(word) * 1)
     debug += " " + str(word_end_in_ly_or_ed(word))
     
-    FearSum += (is_word_in_dictionary(word) * 20.0)
+    FearSum += (is_word_in_dictionary(word) * 10)
     debug += " " + str(is_word_in_dictionary(word))
 
-    if (is_word_in_dictionary(word) == 0):
-        FearSum += (had_word_in_dictionary(word) * -4.0)
-        debug += " " + str(had_word_in_dictionary(word))
-    else:
-        debug += " " + "0"
+    if (is_word_in_dictionary(word) == 1):
+        FearSum += check_frequency_of_word_in_dictionary(word) * 0.2
+
+    #if (is_word_in_dictionary(word) == 0):
+    #    FearSum += (had_word_in_dictionary(word) * -4.0)
+    #    debug += " " + str(had_word_in_dictionary(word))
+    #else:
+    #    debug += " " + "0"
     
-    FearSum += (is_word_in_beginning_of_dictionary(word) * -20.0)
+    FearSum += (is_word_in_beginning_of_dictionary(word) * -1.0)
     debug += " " + str(is_word_in_beginning_of_dictionary(word))
     
-    FearSum += (is_last_letter_capital(word) * -6.0)
+    FearSum += (is_last_letter_capital(word) * -20.0)
     debug += " " + str(is_last_letter_capital(word))
     
     FearFactorNew = FearSum
 
+def CheckFactor(i, x, Clause, status):
+    global Buffer
+    global SpacedClause
+    
+    if status == "solo":
+        print("Checking solo - " + Clause[i:x])
+        print(FearFactorNew)
+
+    if status == "with":
+        print("Checking with - " + Buffer + Clause[i:x])
+        print(FearFactorNew)
+
+    
+    if FearFactorNew > 10 and not Buffer:
+        Buffer = Clause[i:x]
+        #SpacedClause = SpacedClause + " " + Clause[i:x]
+        i = x
+        print("Buffer ==== " + Buffer)
+        
+    if FearFactorNew > 10 and status == "with":
+        print
+        SpacedClause += Buffer + Clause[i:x] + " "
+        Buffer = ""
+        i = x
+    if FearFactorNew > 10 and status == "solo":
+        SpacedClause += Buffer + " "
+        Buffer = Clause[i:x]
+        i = x
+
+    if (x == len(Clause) -1):
+        SpacedClause += Buffer + " " + Clause[i:x + 1]
+
+    return i
+        
 def ClauseFeeder(Clause):
+    global Buffer
+    global SpacedClause
     SpacedClause = ""
     i = 0
     x = 1
+    Buffer = ""
     while(x < len(Clause)):
         possibleWord = Clause[i:x]
-        print(possibleWord)
-        RunRules(possibleWord)
-        print(FearFactorNew)
-        print(debug)
+        #print(possibleWord)
 
-        if (FearFactorOld < 0):
-            if (FearFactorNew < (FearFactorOld * 1.1)):
-                x = x - 1
-                SpacedClause = SpacedClause + " " + Clause[i:x]
-                i = x
-        else:
-            if (FearFactorNew < (FearFactorOld * 0.95)):
-                x = x - 1
-                SpacedClause = SpacedClause + " " + Clause[i:x]
-                i = x
+        print("buffer is " + Buffer)
+        if Buffer:
+            RunRules(Buffer + possibleWord)
+            i = CheckFactor(i, x, Clause, "with")
+
+        RunRules(possibleWord)
+        i = CheckFactor(i, x, Clause, "solo")
+        
+        #print(FearFactorNew)
+        #print(debug)
+        
+
+        
+        
+
+
+
+        
+            
+#        if (FearFactorOld < 0):
+#            if (FearFactorNew < (FearFactorOld * 3)):
+#                x = x - 1
+#                SpacedClause = SpacedClause + " " + Clause[i:x]
+#                i = x
+#        else:
+#            if (FearFactorNew < (FearFactorOld * 0.10)):
+#                x = x - 1
+#                SpacedClause = SpacedClause + " " + Clause[i:x]
+#                i = x
             
         
-        if (x == len(Clause) -1):
-            SpacedClause = SpacedClause + " " + Clause[i:x + 1]
+        
         x += 1
     print(Clause)
     print(SpacedClause)
@@ -278,6 +336,10 @@ def main():
     time.sleep(3)
     buildDict()
     print("done making dictionary")
+
+    #for k in dictionary:
+    #    print (k , dictionary[k])
+
 
     create_clause('ch9Test.txt')
     
