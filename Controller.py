@@ -177,6 +177,9 @@ def length_of_word(word):
     return len(word)
 
 
+def check_frequency_of_word_in_dictionary(word):
+    return dictionary[word]
+
 ######################################################
 # Fear Factor
 
