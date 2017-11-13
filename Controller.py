@@ -112,9 +112,9 @@ def is_word_in_dictionary(word):
             return 1
     return 0
 
-def had_word_in_dictionary(word):
+def was_known_in_dictionary(word):
     for words in dictionary:
-        if word[:(len(word)-1)] == words or word[:(len(word)-2)] == words:
+        if word[:(len(word)-1)] == words[:len(word) - 1]:
             return 1
     return 0
 
@@ -183,83 +183,85 @@ def check_frequency_of_word_in_dictionary(word):
 ######################################################
 # Fear Factor
 
-FearFactorOld = -100.0
-FearFactorNew = -100.0
-debug = ""
+debug = False #Print out debugging info if set to true
+LastKnownWord = 0
+Split = "NotYet"
 
 def RunRules(word):
-    global FearFactorOld
-    global FearFactorNew
     global debug
+    global LastKnownWord
     debug = ""
-    FearFactorOld = FearFactorNew
+    global x
+    global Split
+    
     #High fear factor = more likely to be a word
     #Low fear factor = less likely to be a word
-    FearSum = 0.0
 
+    if (is_word_in_dictionary(word)):
+        LastKnownWord = x
     
-#    FearSum += (is_vowel_not_present(word) * -15.0)
-#    debug += " " + str(is_vowel_not_present(word))
+    if(is_word_in_beginning_of_dictionary(word) == 0 and was_known_in_dictionary(word) == 1):
+        Split = "LastKnownWord"
+        if debug: print("It is no longer a word in the beggining of dict, but was last time")
     
-    FearSum += (is_I(word) * 1.0)
-    debug += " " + str(is_I(word))
-    
-    FearSum += (word_end_in_ing(word) * 0.9)
-    debug += " " + str(word_end_in_ing(word))
-    
-    FearSum += (word_end_in_y_or_s(word) * 0.2)
-    debug += " " + str(word_end_in_y_or_s(word))
-    
-    FearSum += (word_end_in_ly_or_ed(word) * 0.5)
-    debug += " " + str(word_end_in_ly_or_ed(word))
-    
-#    FearSum += (is_word_in_dictionary(word) * 20.0)
-#    debug += " " + str(is_word_in_dictionary(word))
+    if(len(word) > 3 and was_known_in_dictionary(word) == 0):#Length = 4 and not a konwn word
+        if debug: print("4 or longer and not in dictionary")
+        if(word_end_in_ly_or_ed(word)):
+            Split = "Here"
 
-#    if (is_word_in_dictionary(word) == 0):
-#        FearSum += (had_word_in_dictionary(word) * -4.0)
-#        debug += " " + str(had_word_in_dictionary(word))
-#    else:
-#        debug += " " + "0"
-    
-    FearSum += (is_word_in_beginning_of_dictionary(word) * 10.0)
-    debug += " " + str(is_word_in_beginning_of_dictionary(word))
-    
-    FearSum += (is_last_letter_capital(word) * -6.0)
-    debug += " " + str(is_last_letter_capital(word))
-    
-    FearFactorNew = FearSum
+    if(len(word) > 4 and was_known_in_dictionary(word) == 0):#Length = 5 and not a konwn word
+        if debug: print("4 or longer and not in dictionary")
+        if(word_end_in_ing(word)):
+            Split = "Here"
 
+    if(len(word) > 5 and was_known_in_dictionary(word) == 0):#Length = 6 and not a konwn word
+        if(check_for_common_last_letters(word)):#e,s,t,d,n
+            Split = "Here"
+            
+    if(len(word) > 3 and was_known_in_dictionary(word) == 0):
+        if(check_contractions(word) == 1):
+            Split = "Here"
+       
 def ClauseFeeder(Clause):
+    global x
+    global LastKnownWord
+    global Split
+    LastKnownWord = 0
     SpacedClause = ""
     i = 0
     x = 1
+    OneAgo = 0
     while(x < len(Clause)):
         possibleWord = Clause[i:x]
-        print(possibleWord)
+        if debug: print(possibleWord)
         RunRules(possibleWord)
-        print(FearFactorNew)
-        print(debug)
 
         if (is_vowel_not_present(possibleWord) == 0):
-            if (FearFactorOld < 0):
-                if (FearFactorNew < (FearFactorOld * 1.1)):
-                    x = x - 1
+            if (Split == "LastKnownWord"):
+                xTemp = x
+                if(x != OneAgo):
+                    x = LastKnownWord
                     SpacedClause = SpacedClause + " " + Clause[i:x]
                     i = x
-            else:
-                if (FearFactorNew < (FearFactorOld * 0.95)):
-                    x = x - 1
-                    SpacedClause = SpacedClause + " " + Clause[i:x]
-                    i = x
-            
+                    Split = "NotYet"
+                #The infinite loop killer
+                else:
+                    Split = "NotYet"
+                OneAgo = xTemp
+            if (Split == "Here"):
+                LastKnownWord = x
+                SpacedClause = SpacedClause + " " + Clause[i:x]
+                i = x
+                Split = "NotYet"
         
         if (x == len(Clause) -1):
             SpacedClause = SpacedClause + " " + Clause[i:x + 1]
         x += 1
+        if debug: print("Last known word: " + str(LastKnownWord))
     print(Clause)
     print(SpacedClause)
-    ihduahgdgfvat = input("go")
+    print("")
+    if debug: ihduahgdgfvat = input("ready?")
 
 
 def create_clause(file):
@@ -273,7 +275,6 @@ def create_clause(file):
                 ClauseFeeder(clause)
                 #ruleset(clause) best place to feed caluses into ruleset
                 clause = ''
-    print("done creating clause")
 
 def main():
     print('creating new dictionary')
